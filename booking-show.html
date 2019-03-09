@@ -1,0 +1,315 @@
+<html lang="en">
+
+<head>
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ninja Theaters</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <link href="/gentelella-master/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="/gentelella-master/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Custom Theme Style -->
+  <link href="/gentelella-master/build/css/custom.min.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-md">
+  <style>
+    .seat {
+      padding-right: 10px;
+    }
+  </style>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      var socket = io.connect();
+      $(document).on('click', '.seat', function () {
+        socket.emit('book_seat', $(this).text());
+      });
+      $(document).on('click', '#new_show', function () {
+        socket.emit('new_show');
+      });
+
+      socket.on('booked', function (data) {
+        if (data.status == 1) {
+          $('#seat' + data.seat).css("background-color", "red");
+        }
+        if (data.status == 0) {
+          $('#seat' + data.seat).css("background-color", "#20b2aa");
+        }
+        if (data.status == 100) {
+          for (var i = 1; i < 46; i++) {
+
+            $('#seat' + i).css("background-color", "#20b2aa");
+          }
+        }
+      });
+      socket.on('seats_left', function (data) {
+        $('#left').html("<strong style='color:red'>" + data + " " + "tickets" + " " + "left" + "</strong>");
+      });
+      var i = '';
+      var seats = $('#seat-order');
+      var display = '';
+      for (i = 1; i < 46; i++) {
+
+        display += "<span id=seat" + i + " val=" + i + " class='seat btn btn-success' id=" + i;
+        display += "class='fa fa-calendar'>" + i;
+        display += "</span>";
+        if (i % 5 == 0) { display += "<br>"; }
+        seats.html(display);
+      }
+    });
+
+  </script>
+  <style type="text/css">
+    #img {
+      max-width: 100%;
+      /* This rule is very important, please do not ignore this! */
+      background: black;
+    }
+
+    #frame {
+      width: 500px;
+      height: 500px;
+      background: green;
+      opacity: 1;
+    }
+
+    .seat {
+      border: red;
+      width: 90px;
+      height: 40px;
+
+    }
+
+    #seats {
+      background: gray;
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
+
+    #door1 {
+      -ms-transform: rotate(270deg);
+      /* IE 9 */
+      -webkit-transform: rotate(270deg);
+      /* Chrome, Safari, Opera */
+      transform: rotate(270deg);
+      position: absolute;
+      left: 0px;
+
+
+    }
+
+    #door2 {
+      -ms-transform: rotate(360deg);
+      /* IE 9 */
+      -webkit-transform: rotate(360deg);
+      /* Chrome, Safari, Opera */
+      transform: rotate(360deg);
+      position: absolute;
+      top: 95.7%;
+      left: 90%;
+
+
+    }
+  </style>
+
+  <div class="container body">
+    <div class="main_container">
+      <div class="col-md-3 left_col menu_fixed">
+        <div class="le ft_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;">
+            <a href="#" class="site_title"><i class="fa fa-film"></i> <span>Steve Theaters</span></a>
+          </div>
+          <div class="clearfix"></div>
+
+          <!-- menu profile quick info -->
+          <div class="profile">
+            <div class="profile_pic">
+              <img src="/gentelella-master/img/enthirandp.jpg" alt="no image" class="img-circle profile_img">
+            </div>
+
+          </div>
+          <!-- /menu profile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+              <h3>jenil</h3>
+              <small>Ticket Admin</small>
+              <ul class="nav side-menu">
+
+                <li>
+                  <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- /sidebar menu -->
+        </div>
+      </div>
+      >
+
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                  aria-expanded="false">
+                  <img src="/gentelella-master/img/enthirandp.jpg" alt="no image">Steve Theaters
+                  <span class=" fa fa-angle-down"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+
+
+                  <li><a href="#"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                </ul>
+              </li>
+
+              <li role="presentation" class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                  <i class="fa fa-envelope-o"></i>
+                  <span class="badge bg-green"></span>
+                </a>
+                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+
+                  <div id="nav_messages"></div>
+                  <li>
+                    <div class="text-center">
+                      <a href="#">
+                        <strong>See All Messages</strong>
+                        <i class="fa fa-angle-right"></i>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+      <div class="right_col" role="main">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left">
+              <h3>Profile</h3>
+            </div>
+
+          </div>
+
+          <div class="clearfix"></div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Now Running</h2>
+
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                    <div class="profile_img">
+                      <div id="crop-avatar">
+                        <!-- Current avatar -->
+                        <img class="img-responsive avatar-view" src="/gentelella-master/img/enthirandp.jpg"
+                          alt="no image" title="Change the avatar">
+                      </div>
+                    </div>
+
+
+                    <ul class="list-unstyled user_data">
+
+                      <li>
+                        <h4><i class="fa fa-briefcase user-profile-icon"></i> Ticket Admin</h4>
+                      </li>
+                      <li>
+                        <h4><i class="fa fa-ticket user-profile-icon"></i>
+                          <div id="left"></div>
+                        </h4>
+                      </li>
+
+
+
+                    </ul>
+
+                    <br />
+
+
+                  </div>
+                  <div class="col-md-9 col-sm-9 col-xs-12">
+
+                    <!-- start of user-activity-graph -->
+                    <div id="cover" style="width:100%; background: black; height:280px;">
+                      <video width="100%" height="280px" onloadeddata="this.play();"
+                        poster="/gentelella-master/img/enthirandp.jpg" playsinline loop muted controls>
+                        <source src="/gentelella-master/img/enthiran-trailer.mp4" type="video/mp4" />
+                        Your browser does not support the video tag or the file format of this video.
+                      </video>
+                    </div>
+
+
+                    <!-- end of user-activity-graph -->
+
+                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+
+                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2"
+                            data-toggle="tab" aria-expanded="false">Availablity</a>
+                        </li>
+
+                      </ul>
+                      <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content3"
+                          aria-labelledby="home-tab">
+
+                          <center>
+                            <div id="seats" class="container">
+                              <div class="btn btn-danger" id="door1">EXIT</div>
+                              <div class="btn btn-danger" id="door2">EXIT</div>
+                              <div id="seat-order"></div>
+                              <button class="btn btn-primary" id="new_show">New Show</button>
+                            </div>
+                          </center>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /page content -->
+      <!-- footer content -->
+      <footer>
+        <div class="clearfix"></div>
+      </footer>
+      <!-- /footer content -->
+    </div>
+  </div>
+
+  <!-- Bootstrap -->
+  <script src="/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
