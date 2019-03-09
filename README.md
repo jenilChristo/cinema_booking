@@ -2,4 +2,4 @@
 A hobby project on realtime cinema seat booking 
 
 
-![](cinema.gif)
+![](cine_gif.gif)
